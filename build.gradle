@@ -25,6 +25,9 @@ dependencies {
   compile 'com.android.tools.build:gradle:0.9.+'
   compile 'org.aspectj:aspectjtools:1.7.4'
   compile 'org.aspectj:aspectjrt:1.7.4'
+
+  testCompile 'junit:junit:4.10'
+  testCompile 'org.easytesting:fest-assert-core:2.0M10'
 }
 
 install {
