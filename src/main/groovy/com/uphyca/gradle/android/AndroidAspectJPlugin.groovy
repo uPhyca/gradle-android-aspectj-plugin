@@ -55,8 +55,7 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                     String[] args = [
                             "-showWeaveInfo",
                             "-encoding", "UTF-8",
-                            "-1.7",
-                            "-inpath", javaCompile.destinationDir.toString(),
+                            "-"+project.android.compileOptions.sourceCompatibility,
                             "-aspectpath", javaCompile.classpath.asPath,
                             "-d", javaCompile.destinationDir.toString(),
                             "-classpath", javaCompile.classpath.asPath,
