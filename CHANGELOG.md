@@ -1,3 +1,8 @@
+Version 0.9.3 *(2014-5-13)*
+----------------------------
+
+Fixed; proguard warning "can't find enclosing method"
+
 Version 0.9.2 *(2014-5-13)*
 ----------------------------
 
