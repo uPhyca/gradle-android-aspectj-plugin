@@ -35,32 +35,17 @@ class AndroidAspectJPlugin implements Plugin<Project> {
         project.afterEvaluate {
             variants.all { variant ->
 
-                def sourceRoots = []
-                project.android.sourceSets.main.java.srcDirs.findAll { it.exists() }.each {
-                    sourceRoots << it.absolutePath
-                }
-                project.android.sourceSets[new File(variant.dirName).name].java.srcDirs.findAll {
-                    it.exists()
-                }.each { sourceRoots << it.absolutePath }
-                variant.productFlavors.each {
-                    project.android.sourceSets[it.name].java.srcDirs.findAll { it.exists() }.each {
-                        sourceRoots << it.absolutePath
-                    }
-                }
-                sourceRoots << "${project.buildDir}/source/r/${variant.dirName}"
-                sourceRoots << "${project.buildDir}/source/buildConfig/${variant.dirName}"
-
                 JavaCompile javaCompile = variant.javaCompile
                 javaCompile.doLast {
                     String[] args = [
                             "-showWeaveInfo",
                             "-encoding", "UTF-8",
                             "-"+project.android.compileOptions.sourceCompatibility,
+                            "-inpath", javaCompile.destinationDir.toString(),
                             "-aspectpath", javaCompile.classpath.asPath,
                             "-d", javaCompile.destinationDir.toString(),
                             "-classpath", javaCompile.classpath.asPath,
-                            "-bootclasspath", plugin.runtimeJarList.join(File.pathSeparator),
-                            "-sourceroots", sourceRoots.join(File.pathSeparator)
+                            "-bootclasspath", plugin.runtimeJarList.join(File.pathSeparator)
                     ]
 
                     log.debug "ajc args: " + Arrays.toString(args)
