@@ -1,3 +1,8 @@
+Version 0.9.4 *(2014-5-14)*
+----------------------------
+
+Fixed; VerifyError; VFY: invoke type does not match method type
+
 Version 0.9.3 *(2014-5-13)*
 ----------------------------
 
