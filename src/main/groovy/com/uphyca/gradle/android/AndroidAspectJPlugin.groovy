@@ -14,93 +14,59 @@ class AndroidAspectJPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        def log = project.logger
+        final def log = project.logger
 
         final def variants
-        final def plugin
         if (project.plugins.hasPlugin(AppPlugin)) {
             variants = project.android.applicationVariants
-            plugin = project.plugins.getPlugin(AppPlugin)
         } else if (project.plugins.hasPlugin(LibraryPlugin)) {
             variants = project.android.libraryVariants
-            plugin = project.plugins.getPlugin(LibraryPlugin)
         } else {
             throw new IllegalStateException("The 'android' or 'android-library' plugin is required.")
         }
 
         project.dependencies {
-            compile 'org.aspectj:aspectjrt:1.7.4'
+            compile 'org.aspectj:aspectjrt:1.8.+'
         }
 
-        project.afterEvaluate {
-            variants.all { variant ->
+        variants.all { variant ->
 
-                JavaCompile javaCompile = variant.javaCompile
-                javaCompile.doLast {
-
-
-                    String[] args = null
-                    if (variant.buildType.runProguard) {
-                        args = [
-                                "-showWeaveInfo",
-                                "-encoding", "UTF-8",
-                                "-" + project.android.compileOptions.sourceCompatibility,
-                                "-inpath", javaCompile.destinationDir.toString(),
-                                "-aspectpath", javaCompile.classpath.asPath,
-                                "-d", javaCompile.destinationDir.toString(),
-                                "-classpath", javaCompile.classpath.asPath,
-                                "-bootclasspath", plugin.runtimeJarList.join(File.pathSeparator)
-                        ]
-                    } else {
-                        def sourceRoots = []
-                        project.android.sourceSets.main.java.srcDirs.findAll { it.exists() }.each {
-                            sourceRoots << it.absolutePath
-                        }
-                        project.android.sourceSets[new File(variant.dirName).name].java.srcDirs.findAll {
-                            it.exists()
-                        }.each { sourceRoots << it.absolutePath }
-                        variant.productFlavors.each {
-                            project.android.sourceSets[it.name].java.srcDirs.findAll { it.exists() }.each {
-                                sourceRoots << it.absolutePath
-                            }
-                        }
-                        sourceRoots << "${project.buildDir}/source/r/${variant.dirName}"
-                        sourceRoots << "${project.buildDir}/source/buildConfig/${variant.dirName}"
-
-                        args = [
-                                "-showWeaveInfo",
-                                "-encoding", "UTF-8",
-                                "-" + project.android.compileOptions.sourceCompatibility,
-                                "-aspectpath", javaCompile.classpath.asPath,
-                                "-d", javaCompile.destinationDir.toString(),
-                                "-classpath", javaCompile.classpath.asPath,
-                                "-bootclasspath", plugin.runtimeJarList.join(File.pathSeparator),
-                                "-sourceroots", sourceRoots.join(File.pathSeparator)
-                        ]
-                    }
+            JavaCompile javaCompile = variant.javaCompile
+            javaCompile.doLast {
 
 
-                    log.debug "ajc args: " + Arrays.toString(args)
+                String[] args = [
+                    "-showWeaveInfo",
+                    "-encoding", "UTF-8",
+                    "-" + project.android.compileOptions.sourceCompatibility,
+                    "-inpath", javaCompile.destinationDir.toString(),
+                    "-aspectpath", javaCompile.classpath.asPath,
+                    "-d", javaCompile.destinationDir.toString(),
+                    "-classpath", javaCompile.classpath.asPath,
+                    "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
+                ]
 
-                    MessageHandler handler = new MessageHandler(true);
-                    new Main().run(args, handler);
-                    for (IMessage message : handler.getMessages(null, true)) {
-                        switch (message.getKind()) {
-                            case IMessage.ABORT:
-                            case IMessage.ERROR:
-                            case IMessage.FAIL:
-                                log.error message.message, message.thrown
-                                break;
-                            case IMessage.WARNING:
-                                log.warn message.message, message.thrown
-                                break;
-                            case IMessage.INFO:
-                                log.info message.message, message.thrown
-                                break;
-                            case IMessage.DEBUG:
-                                log.debug message.message, message.thrown
-                                break;
-                        }
+
+                log.debug "ajc args: " + Arrays.toString(args)
+
+                MessageHandler handler = new MessageHandler(true);
+                new Main().run(args, handler);
+                for (IMessage message : handler.getMessages(null, true)) {
+                    switch (message.getKind()) {
+                        case IMessage.ABORT:
+                        case IMessage.ERROR:
+                        case IMessage.FAIL:
+                            log.error message.message, message.thrown
+                            break;
+                        case IMessage.WARNING:
+                            log.warn message.message, message.thrown
+                            break;
+                        case IMessage.INFO:
+                            log.info message.message, message.thrown
+                            break;
+                        case IMessage.DEBUG:
+                            log.debug message.message, message.thrown
+                            break;
                     }
                 }
             }
