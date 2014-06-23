@@ -1,6 +1,7 @@
 // This plugin is based on https://github.com/JakeWharton/hugo
 package com.uphyca.gradle.android
 
+import org.gradle.api.GradleException
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.LibraryPlugin
 import org.aspectj.bridge.IMessage
@@ -15,14 +16,16 @@ class AndroidAspectJPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         final def log = project.logger
-
         final def variants
+        final def plugin
         if (project.plugins.hasPlugin(AppPlugin)) {
             variants = project.android.applicationVariants
+            plugin = project.plugins.getPlugin(AppPlugin)
         } else if (project.plugins.hasPlugin(LibraryPlugin)) {
             variants = project.android.libraryVariants
+            plugin = project.plugins.getPlugin(LibraryPlugin)
         } else {
-            throw new IllegalStateException("The 'android' or 'android-library' plugin is required.")
+            throw new GradleException("The 'android' or 'android-library' plugin is required.")
         }
 
         project.dependencies {
@@ -34,8 +37,14 @@ class AndroidAspectJPlugin implements Plugin<Project> {
             JavaCompile javaCompile = variant.javaCompile
             javaCompile.doLast {
 
+                def bootClasspath
+                if (plugin.properties['runtimeJarList']) {
+                    bootClasspath = plugin.runtimeJarList
+                } else  {
+                    bootClasspath = plugin.bootClasspath
+                }
 
-                String[] args = [
+                def String[] args = [
                     "-showWeaveInfo",
                     "-encoding", "UTF-8",
                     "-" + project.android.compileOptions.sourceCompatibility,
@@ -43,7 +52,7 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                     "-aspectpath", javaCompile.classpath.asPath,
                     "-d", javaCompile.destinationDir.toString(),
                     "-classpath", javaCompile.classpath.asPath,
-                    "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
+                    "-bootclasspath", bootClasspath.join(File.pathSeparator)
                 ]
 
 

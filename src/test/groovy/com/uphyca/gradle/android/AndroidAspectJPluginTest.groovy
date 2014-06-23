@@ -1,5 +1,6 @@
 package com.uphyca.gradle.android
 
+import org.gradle.api.GradleException
 import org.fest.assertions.api.Assertions
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -22,7 +23,7 @@ class AndroidAspectJPluginTest {
     Project project = ProjectBuilder.builder().build();
     try {
       project.apply plugin: 'android-aspectj'
-    } catch (IllegalStateException e) {
+    } catch (GradleException e) {
       Assertions.assertThat(e).hasMessage("The 'android' or 'android-library' plugin is required.");
     }
   }
