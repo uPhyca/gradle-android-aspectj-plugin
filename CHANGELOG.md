@@ -1,3 +1,8 @@
+Version 0.9.5 *(2014-6-23)*
+----------------------------
+
+Updated; support latest build tools version
+
 Version 0.9.4 *(2014-5-14)*
 ----------------------------
 
