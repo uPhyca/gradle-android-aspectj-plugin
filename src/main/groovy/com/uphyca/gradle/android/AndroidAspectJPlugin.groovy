@@ -44,6 +44,22 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                     bootClasspath = plugin.bootClasspath
                 }
 
+                def sourceRoots = []
+                project.android.sourceSets.main.java.srcDirs.findAll { it.exists() }.each {
+                    sourceRoots << it.absolutePath
+                }
+                project.android.sourceSets[new File(variant.dirName).name].java.srcDirs.findAll {
+                    it.exists()
+                }.each { sourceRoots << it.absolutePath }
+                variant.productFlavors.each {
+                    project.android.sourceSets[it.name].java.srcDirs.findAll { it.exists() }.each {
+                        sourceRoots << it.absolutePath
+                    }
+                }
+                def generatedSourcesDir = getGeneratedSourcesDir(project)
+                sourceRoots << "${project.buildDir}/${generatedSourcesDir}/r/${variant.dirName}"
+                sourceRoots << "${project.buildDir}/${generatedSourcesDir}/buildConfig/${variant.dirName}"
+
                 def String[] args = [
                     "-showWeaveInfo",
                     "-encoding", "UTF-8",
@@ -52,7 +68,8 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                     "-aspectpath", javaCompile.classpath.asPath,
                     "-d", javaCompile.destinationDir.toString(),
                     "-classpath", javaCompile.classpath.asPath,
-                    "-bootclasspath", bootClasspath.join(File.pathSeparator)
+                    "-bootclasspath", bootClasspath.join(File.pathSeparator),
+                    "-sourceroots", sourceRoots.join(File.pathSeparator)
                 ]
 
 
@@ -66,7 +83,7 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                         case IMessage.ERROR:
                         case IMessage.FAIL:
                             log.error message.message, message.thrown
-                            break;
+                            throw new GradleException(message.message, message.thrown)
                         case IMessage.WARNING:
                             log.warn message.message, message.thrown
                             break;
@@ -80,5 +97,43 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                 }
             }
         }
+    }
+
+    String getGeneratedSourcesDir(Project project) {
+        return getNameByVersion(project, 0, 11, 'generated/source', 'source')
+    }
+
+    String getNameByVersion(Project project, int major, int minor, String newName, String oldName) {
+        def androidPluginVersion = getPluginVersion(project, "com.android.tools.build", "gradle")
+
+        if (androidPluginVersion == null) {
+            return newName
+        }
+        def vArray = androidPluginVersion.split("\\.")
+        if (vArray.length < 2) {
+            return newName
+        }
+        if (major < Integer.parseInt(vArray[0])) {
+            return newName
+        }
+        if (major == Integer.parseInt(vArray[0]) && minor <= Integer.parseInt(vArray[1])) {
+            return newName
+        }
+        return oldName
+    }
+
+    String getPluginVersion(Project project, String group, String name) {
+        def Project targetProject = project
+        while (targetProject != null) {
+            def version
+            targetProject.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.each {
+                e-> if (e.moduleGroup.equals(group) && e.moduleName.equals(name)) {version = e.moduleVersion}
+            }
+            if (version != null) {
+                return version
+            }
+            targetProject = targetProject.parent
+        }
+        return null
     }
 }
