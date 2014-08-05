@@ -24,19 +24,19 @@ task wrapper(type: Wrapper) {
 }
 
 task cleanTest(type: Exec) {
-    executable = './gradlew'
+    executable = '../gradlew'
     workingDir = project.file('tests')
     args = [ 'clean' ]
 }
 
 task assembleTest(type: Exec) {
-    executable = './gradlew'
+    executable = '../gradlew'
     workingDir = project.file('tests')
     args = [ 'assemble' ]
 }
 
 task connectedAndroidTest(type: Exec) {
-    executable = './gradlew'
+    executable = '../gradlew'
     workingDir = project.file('tests')
     args = [ 'connectedAndroidTest' ]
 }
