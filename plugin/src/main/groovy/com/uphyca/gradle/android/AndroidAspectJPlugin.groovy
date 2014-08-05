@@ -28,6 +28,9 @@ class AndroidAspectJPlugin implements Plugin<Project> {
             throw new GradleException("The 'android' or 'android-library' plugin is required.")
         }
 
+        project.repositories {
+            mavenCentral()
+        }
         project.dependencies {
             compile 'org.aspectj:aspectjrt:1.8.+'
         }

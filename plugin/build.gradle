@@ -1,0 +1,74 @@
+buildscript {
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.2'
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'nexus'
+
+group = GROUP
+version = VERSION_NAME
+
+dependencies {
+    repositories {
+        mavenCentral()
+    }
+
+    compile gradleApi()
+    compile localGroovy()
+    compile 'com.android.tools.build:gradle:0.11.+'
+    compile "org.aspectj:aspectjtools:${aspectjVersion}"
+    compile "org.aspectj:aspectjrt:${aspectjVersion}"
+
+    testCompile 'junit:junit:4.10'
+    testCompile 'org.easytesting:fest-assert-core:2.0M10'
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = 'gradle-android-aspectj-plugin'
+    }
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        pom.artifactId = 'gradle-android-aspectj-plugin'
+    }
+}
+
+modifyPom {
+    project {
+        name "Android AspectJ Plugin"
+        description POM_DESCRIPTION
+        url POM_URL
+        inceptionYear '2014'
+
+        scm {
+            url POM_SCM_URL
+            connection POM_SCM_CONNECTION
+            developerConnection POM_SCM_DEV_CONNECTION
+        }
+
+        licenses {
+            license {
+                name POM_LICENCE_NAME
+                url POM_LICENCE_URL
+                distribution POM_LICENCE_DIST
+            }
+        }
+
+        developers {
+            developer {
+                id POM_DEVELOPER_ID
+                name POM_DEVELOPER_NAME
+            }
+        }
+
+        organization {
+            name POM_ORGANIZATION_NAME
+            url POM_ORGANIZATION_URL
+        }
+    }
+}
