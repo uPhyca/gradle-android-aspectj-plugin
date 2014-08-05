@@ -1,3 +1,9 @@
+Version 0.9.6 *(2014-8-5)*
+----------------------------
+
+Added; support .aj files
+Fixed; VerifyError
+
 Version 0.9.5 *(2014-6-23)*
 ----------------------------
 
