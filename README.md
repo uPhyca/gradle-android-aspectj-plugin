@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/uPhyca/gradle-android-aspectj-plugin.png?branch=master)](http://travis-ci.org/uPhyca/gradle-android-aspectj-plugin)
 [![wercker status](https://app.wercker.com/status/abab3a54a2dd310784896ceca989a462/s "wercker status")](https://app.wercker.com/project/bykey/abab3a54a2dd310784896ceca989a462)
 
 Gradle Android AspectJ Plugin
