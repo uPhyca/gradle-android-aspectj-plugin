@@ -6,18 +6,24 @@ build:
     - script:
         name: show base information
         code: |
-          gradle -v
+          ./gradlew -v
           echo $ANDROID_HOME
           echo $ANDROID_SDK_VERSION
           echo $ANDROID_BUILD_TOOLS
           echo $ANDROID_UPDATE_FILTER
           echo $ANDROID_NDK_HOME
     - android-sdk-update:
-        filter: platform-tools,build-tools-19.1.0,android-19,sysimg-19,extra-android-m2repository
+        filter: platform-tools,build-tools-20.0.0,android-19,sysimg-19,extra-android-m2repository
     - script:
         name: build and install
         code: |
-          gradle --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build install
+          ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build install
+    - setup-android-emulator:
+        target: android-19
+    - script:
+        name: connectedCheck
+        code: |
+          ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR connectedAndroidTest
 after-steps:
     # Use the build results
     - script:

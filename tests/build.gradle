@@ -4,8 +4,8 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
-        classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.6-SNAPSHOT'
+        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.7-SNAPSHOT'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -19,7 +19,7 @@ def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    buildToolsVersion "20.0.0"
 
     dexOptions {
         // Skip pre-dexing when running on Wercker CI or when disabled via -Dpre-dex=false.
