@@ -49,6 +49,7 @@ class AspectjCompile extends DefaultTask {
                 "-showWeaveInfo",
                 "-encoding", "UTF-8",
                 "-" + project.android.compileOptions.sourceCompatibility,
+                "-inpath", destinationDir.absolutePath,
                 "-aspectpath", aspectpath.asPath,
                 "-d", destinationDir.absolutePath,
                 "-classpath", classpath.asPath,
