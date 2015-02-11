@@ -1,5 +1,5 @@
 include 'plugin'
 project(':plugin').name = 'plugin'
 
-//include 'tests'
-//project(':tests').name = 'tests'
+include 'tests'
+project(':tests').name = 'tests'

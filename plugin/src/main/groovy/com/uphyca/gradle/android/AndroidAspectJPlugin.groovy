@@ -43,9 +43,9 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                 }
 
                 def variantName = variant.name.capitalize()
-                def taskName = "compile${variantName}Aspectj"
+                def newTaskName = "compile${variantName}Aspectj"
 
-                def aspectjCompile = project.task(taskName, type: AspectjCompile) {
+                def aspectjCompile = project.task(newTaskName, overwrite: true, description: 'Compiles AspectJ Source', type: AspectjCompile) {
                     aspectpath = javaCompile.classpath
                     destinationDir = javaCompile.destinationDir
                     classpath = javaCompile.classpath
@@ -53,8 +53,15 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                     sourceroots = javaCompile.source
                 }
 
-                aspectjCompile.dependsOn(javaCompile)
-                javaCompile.finalizedBy(aspectjCompile)
+                aspectjCompile.doFirst {
+
+                    javaCompile.destinationDir.mkdirs()
+                }
+
+                def compileAspect = project.tasks.getByName(newTaskName)
+                compileAspect.setDependsOn(variant.javaCompile.dependsOn)
+                variant.javaCompile.deleteAllActions()
+                variant.javaCompile.dependsOn compileAspect
             }
         }
     }
