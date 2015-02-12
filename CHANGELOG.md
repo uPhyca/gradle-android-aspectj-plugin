@@ -1,3 +1,8 @@
+Version 0.9.9 *(2015-2-12)*
+----------------------------
+Fixed; Compilation issue.
+Updated: Android Gradle plugin 1.0.0
+
 Version 0.9.8 *(2014-11-13)*
 ----------------------------
 
