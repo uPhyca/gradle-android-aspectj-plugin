@@ -5,12 +5,14 @@ project.ext {
 allprojects {
     buildscript {
         repositories {
+            jcenter()
             mavenCentral()
         }
     }
     
     dependencies {
         repositories {
+            jcenter()
             mavenCentral()
             mavenLocal()
         }
@@ -20,7 +22,7 @@ allprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.10'
+    gradleVersion = '2.2.1'
 }
 
 task cleanTest(type: Exec) {

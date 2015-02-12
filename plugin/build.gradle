@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.2'
+        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
     }
 }
 
@@ -13,12 +13,13 @@ version = VERSION_NAME
 
 dependencies {
     repositories {
+        jcenter()
         mavenCentral()
     }
 
     compile gradleApi()
     compile localGroovy()
-    compile 'com.android.tools.build:gradle:0.11.+'
+    compile 'com.android.tools.build:gradle:1.0.+'
     compile "org.aspectj:aspectjtools:${aspectjVersion}"
     compile "org.aspectj:aspectjrt:${aspectjVersion}"
 
