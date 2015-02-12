@@ -7,24 +7,23 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
 
 class AndroidAspectJPluginTest {
-  @Test public void pluginDetectsAppPlugin() {
-    Project project = ProjectBuilder.builder().build();
-    project.apply plugin: 'android'
-    project.apply plugin: 'android-aspectj'
-  }
-
-  @Test public void pluginDetectsLibraryPlugin() {
-    Project project = ProjectBuilder.builder().build();
-    project.apply plugin: 'android-library'
-    project.apply plugin: 'android-aspectj'
-  }
-
-  @Test public void pluginFailsWithoutAndroidPlugin() {
-    Project project = ProjectBuilder.builder().build();
-    try {
-      project.apply plugin: 'android-aspectj'
-    } catch (GradleException e) {
-      Assertions.assertThat(e).hasMessage("The 'android' or 'android-library' plugin is required.");
+    @Test
+    public void pluginDetectsAppPlugin() {
+        Project project = ProjectBuilder.builder().build();
+        project.apply plugin: 'com.android.application'
+        project.apply plugin: 'android-aspectj'
     }
-  }
+
+    @Test
+    public void pluginDetectsLibraryPlugin() {
+        Project project = ProjectBuilder.builder().build();
+        project.apply plugin: 'com.android.library'
+        project.apply plugin: 'android-aspectj'
+    }
+
+    @Test(expected = GradleException)
+    public void pluginFailsWithoutAndroidPlugin() {
+        Project project = ProjectBuilder.builder().build();
+        project.apply plugin: 'android-aspectj'
+    }
 }

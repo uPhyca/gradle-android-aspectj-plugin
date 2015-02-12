@@ -14,14 +14,18 @@ class AndroidAspectJPlugin implements Plugin<Project> {
     void apply(Project project) {
         final def variants
         final def plugin
-        if (project.plugins.hasPlugin(AppPlugin)) {
-            variants = project.android.applicationVariants
-            plugin = project.plugins.getPlugin(AppPlugin)
-        } else if (project.plugins.hasPlugin(LibraryPlugin)) {
-            variants = project.android.libraryVariants
-            plugin = project.plugins.getPlugin(LibraryPlugin)
-        } else {
-            throw new GradleException("The 'android' or 'android-library' plugin is required.")
+        try {
+            if (project.plugins.hasPlugin(AppPlugin)) {
+                variants = project.android.applicationVariants
+                plugin = project.plugins.getPlugin(AppPlugin)
+            } else if (project.plugins.hasPlugin(LibraryPlugin)) {
+                variants = project.android.libraryVariants
+                plugin = project.plugins.getPlugin(LibraryPlugin)
+            } else {
+                throw new GradleException("The 'com.android.application' or 'com.android.library' plugin is required.")
+            }
+        } catch (Exception e) {
+            throw new GradleException(e);
         }
 
         project.repositories {
