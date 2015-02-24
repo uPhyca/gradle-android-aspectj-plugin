@@ -59,6 +59,11 @@ class AndroidAspectJPlugin implements Plugin<Project> {
 
                 aspectjCompile.doFirst {
 
+                    if (javaCompile.destinationDir.exists()) {
+
+                        javaCompile.destinationDir.deleteDir()
+                    }
+                    
                     javaCompile.destinationDir.mkdirs()
                 }
 
