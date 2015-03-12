@@ -43,7 +43,7 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                 if (plugin.properties['runtimeJarList']) {
                     bootClasspath = plugin.runtimeJarList
                 } else {
-                    bootClasspath = plugin.bootClasspath
+                    bootClasspath = project.android.bootClasspath
                 }
 
                 def variantName = variant.name.capitalize()
