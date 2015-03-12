@@ -8,6 +8,9 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'nexus'
 
+targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_7
+
 group = GROUP
 version = VERSION_NAME
 
