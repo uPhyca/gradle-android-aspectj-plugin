@@ -1,3 +1,7 @@
+Version 0.9.11 *(2015-3-13)*
+----------------------------
+Fixed: Enforce Java 1.7 compatibility for the plugin.
+
 Version 0.9.10 *(2015-3-13)*
 ----------------------------
 Fixed; Compilation issue.
