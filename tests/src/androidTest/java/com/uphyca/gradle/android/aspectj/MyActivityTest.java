@@ -2,7 +2,7 @@ package com.uphyca.gradle.android.aspectj;
 
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
-import junit.framework.TestCase;
+import android.view.ContextThemeWrapper;
 
 public class MyActivityTest extends ActivityUnitTestCase<MyActivity> {
 
@@ -15,6 +15,10 @@ public class MyActivityTest extends ActivityUnitTestCase<MyActivity> {
     public void setUp() throws Exception {
         super.setUp();
 
+        // copy from http://stackoverflow.com/questions/22364433/activityunittestcase-and-startactivity-with-actionbaractivity
+        ContextThemeWrapper context =
+                new ContextThemeWrapper(getInstrumentation().getTargetContext(), R.style.AppTheme);
+        setActivityContext(context);
     }
 
     public void testSayHello() throws Exception {

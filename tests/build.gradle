@@ -23,7 +23,7 @@ task wrapper(type: Wrapper) {
 }
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 21
     buildToolsVersion "20.0.0"
 
     compileOptions {
@@ -52,4 +52,8 @@ android {
     lintOptions {
         abortOnError false
     }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:21.0.3'
 }

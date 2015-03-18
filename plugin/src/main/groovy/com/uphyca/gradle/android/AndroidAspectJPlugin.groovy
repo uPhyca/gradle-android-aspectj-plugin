@@ -50,14 +50,14 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                 def newTaskName = "compile${variantName}Aspectj"
 
                 def aspectjCompile = project.task(newTaskName, overwrite: true, description: 'Compiles AspectJ Source', type: AspectjCompile) {
+                }
+
+                aspectjCompile.doFirst {
                     aspectpath = javaCompile.classpath
                     destinationDir = javaCompile.destinationDir
                     classpath = javaCompile.classpath
                     bootclasspath = bootClasspath.join(File.pathSeparator)
                     sourceroots = javaCompile.source
-                }
-
-                aspectjCompile.doFirst {
 
                     if (javaCompile.destinationDir.exists()) {
 
