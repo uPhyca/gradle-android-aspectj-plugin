@@ -1,13 +1,13 @@
 package com.uphyca.gradle.android.aspectj;
 
-import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class MyActivity extends Activity {
+public class MyActivity extends ActionBarActivity {
 
     public String sayHello() {
         return "Hello, world.";
