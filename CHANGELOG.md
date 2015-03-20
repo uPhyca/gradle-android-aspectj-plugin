@@ -1,3 +1,7 @@
+Version 0.9.12 *(2015-3-20)*
+----------------------------
+Fixed: can't resolve classes in libs/*.jar of aar library
+
 Version 0.9.11 *(2015-3-13)*
 ----------------------------
 Fixed: Enforce Java 1.7 compatibility for the plugin.
