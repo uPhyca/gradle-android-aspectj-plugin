@@ -1,77 +1,103 @@
 // This plugin is based on https://github.com/JakeWharton/hugo
 package com.uphyca.gradle.android
 
-import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.LibraryPlugin
-import org.gradle.api.GradleException
+import com.android.build.gradle.api.BaseVariant
+import com.android.builder.model.BaseConfig
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.internal.DefaultDomainObjectSet
 import org.gradle.api.tasks.compile.JavaCompile
 
 class AndroidAspectJPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        final def variants
-        final def plugin
-        try {
-            if (project.plugins.hasPlugin(AppPlugin)) {
-                variants = project.android.applicationVariants
-                plugin = project.plugins.getPlugin(AppPlugin)
-            } else if (project.plugins.hasPlugin(LibraryPlugin)) {
-                variants = project.android.libraryVariants
-                plugin = project.plugins.getPlugin(LibraryPlugin)
-            } else {
-                throw new GradleException("The 'com.android.application' or 'com.android.library' plugin is required.")
-            }
-        } catch (Exception e) {
-            throw new GradleException(e);
-        }
+
+        def configuration = new AndroidConfiguration(project)
 
         project.repositories {
             mavenCentral()
         }
         project.dependencies {
-            compile 'org.aspectj:aspectjrt:1.8.+'
+            compile 'org.aspectj:aspectjrt:1.8.7'
         }
 
-        project.afterEvaluate {
-            variants.all { variant ->
 
-                JavaCompile javaCompile = variant.javaCompile
-                def bootClasspath
-                if (plugin.properties['runtimeJarList']) {
-                    bootClasspath = plugin.runtimeJarList
-                } else {
-                    bootClasspath = project.android.bootClasspath
-                }
+        if (!project.configurations.findByName('ajInpath')) {
+            def ajInpathConfiguration = project.configurations.create('ajInpath')
+        }
+
+        //def aspectjConfiguration = project.configurations.create('aspectj').extendsFrom(project.configurations.compile, project.configurations.provided)
+
+        createConfigurations(project, project.android.buildTypes)
+        createConfigurations(project, project.android.productFlavors)
+        createConfigurations(project, configuration.variants)
+
+        project.afterEvaluate {
+            configuration.variants.all { variant ->
+
+                def configurationName = "${variant.name}Aspectj"
 
                 def variantName = variant.name.capitalize()
-                def newTaskName = "compile${variantName}Aspectj"
+                def taskName = "compile${variantName}Aspectj"
 
-                def aspectjCompile = project.task(newTaskName, overwrite: true, description: 'Compiles AspectJ Source', type: AspectjCompile) {
-                }
+                JavaCompile javaCompile = variant.javaCompiler
 
-                aspectjCompile.doFirst {
+                def aspectjCompile = project.task(taskName, overwrite: true, group: 'build', description: 'Compiles AspectJ Source', type: AspectjCompile) {
+
+                    sourceCompatibility = javaCompile.sourceCompatibility
+                    targetCompatibility = javaCompile.targetCompatibility
+                    encoding = javaCompile.options.encoding
+
                     aspectpath = javaCompile.classpath
                     destinationDir = javaCompile.destinationDir
                     classpath = javaCompile.classpath
-                    bootclasspath = bootClasspath.join(File.pathSeparator)
-                    sourceroots = javaCompile.source
+                    bootclasspath = configuration.bootClasspath.join(File.pathSeparator)
 
-                    if (javaCompile.destinationDir.exists()) {
 
-                        javaCompile.destinationDir.deleteDir()
+
+                    def sourceSets = new ArrayList()
+                    variant.variantData.extraGeneratedSourceFolders.each {
+                        source it
                     }
-                    
-                    javaCompile.destinationDir.mkdirs()
+                    variant.variantData.javaSources.each {
+                        if (it instanceof File) {
+                            source it
+                        } else {
+                            it.asFileTrees.each {
+                                source it.dir
+                            }
+                        }
+                    }
+                    inpath = project.configurations.ajInpath
                 }
 
-                def compileAspect = project.tasks.getByName(newTaskName)
-                compileAspect.setDependsOn(variant.javaCompile.dependsOn)
-                variant.javaCompile.deleteAllActions()
-                variant.javaCompile.dependsOn compileAspect
+                aspectjCompile.dependsOn javaCompile
+                javaCompile.finalizedBy aspectjCompile
             }
+        }
+    }
+
+    private void createConfigurations(Project project, DefaultDomainObjectSet<? extends BaseVariant> variants) {
+        variants.all {
+            createConfiguration(project, it)
+        }
+    }
+
+    private void createConfigurations(Project project, NamedDomainObjectContainer<? extends BaseConfig> configs) {
+        configs.each {
+            createConfiguration(project, it)
+        }
+        configs.whenObjectAdded {
+            createConfiguration(project, it)
+        }
+    }
+
+    private void createConfiguration(Project project, def config) {
+        def configurationName = "${config.name}Aspectj"
+        if (!project.configurations.findByName(configurationName)) {
+            project.configurations.create(configurationName)
         }
     }
 }

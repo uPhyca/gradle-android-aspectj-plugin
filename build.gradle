@@ -1,6 +1,4 @@
-project.ext {
-    aspectjVersion = '1.8.5'
-}
+apply from: 'ext.gradle'
 
 allprojects {
     buildscript {
@@ -22,23 +20,5 @@ allprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
-}
-
-task cleanTest(type: Exec) {
-    executable = './gradlew'
-    workingDir = project.file('tests')
-    args = [ 'clean' ]
-}
-
-task assembleTest(type: Exec) {
-    executable = './gradlew'
-    workingDir = project.file('tests')
-    args = [ 'assemble' ]
-}
-
-task connectedAndroidTest(type: Exec) {
-    executable = './gradlew'
-    workingDir = project.file('tests')
-    args = [ 'connectedAndroidTest' ]
+    gradleVersion = '2.4'
 }

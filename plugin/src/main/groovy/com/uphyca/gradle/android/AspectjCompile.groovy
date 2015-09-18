@@ -3,21 +3,23 @@ package com.uphyca.gradle.android
 import org.aspectj.bridge.IMessage
 import org.aspectj.bridge.MessageHandler
 import org.aspectj.tools.ajc.Main
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.compile.AbstractCompile
 
-class AspectjCompile extends DefaultTask {
+class AspectjCompile extends AbstractCompile {
 
-    FileCollection aspectpath
-    File destinationDir
-    FileCollection classpath
-    String bootclasspath
-    def sourceroots
+    private String encoding
+    private FileCollection inpath
+    private FileCollection aspectpath
+    private String bootclasspath
 
+//    @Override
     @TaskAction
-    def compile() {
+    protected void compile() {
 
         final def log = project.logger
 
@@ -38,29 +40,29 @@ class AspectjCompile extends DefaultTask {
         // -preserveAllLocals:
         //  Preserve all local variables during code generation (to facilitate debugging).
 
-        def sourceRoots = []
-        sourceroots.sourceCollections.each {
-            it.asFileTrees.each {
-                sourceRoots << it.dir
-            }
-        }
-
-        def String[] args = [
+        def args = [
                 "-showWeaveInfo",
-                "-encoding", "UTF-8",
-                "-" + project.android.compileOptions.sourceCompatibility,
-                "-inpath", destinationDir.absolutePath,
-                "-aspectpath", aspectpath.asPath,
+                "-encoding", getEncoding(),
+                "-source", getSourceCompatibility(),
+                "-target", getTargetCompatibility(),
                 "-d", destinationDir.absolutePath,
                 "-classpath", classpath.asPath,
                 "-bootclasspath", bootclasspath,
                 "-sourceroots", sourceRoots.join(File.pathSeparator)
         ]
+        if (!getInpath().isEmpty()) {
+            args << '-inpath'
+            args << getInpath().asPath
+        }
+        if (!getAspectpath().isEmpty()) {
+            args << '-aspectpath'
+            args << getAspectpath().asPath
+        }
 
-        log.debug "ajc args: " + Arrays.toString(args)
+        log.debug "ajc args: " + Arrays.toString(args as String[])
 
         MessageHandler handler = new MessageHandler(true);
-        new Main().run(args, handler);
+        new Main().run(args as String[], handler);
         for (IMessage message : handler.getMessages(null, true)) {
             switch (message.getKind()) {
                 case IMessage.ABORT:
@@ -79,6 +81,51 @@ class AspectjCompile extends DefaultTask {
                     break;
             }
         }
+    }
 
+    @Input
+    String getEncoding() {
+        return encoding
+    }
+
+    void setEncoding(String encoding) {
+        this.encoding = encoding
+    }
+
+    @InputFiles
+    FileCollection getInpath() {
+        return inpath
+    }
+
+    void setInpath(FileCollection inpath) {
+        this.inpath = inpath
+    }
+
+    @InputFiles
+    FileCollection getAspectpath() {
+        return aspectpath
+    }
+
+    void setAspectpath(FileCollection aspectpath) {
+        this.aspectpath = aspectpath
+    }
+
+    @Input
+    String getBootclasspath() {
+        return bootclasspath
+    }
+
+    void setBootclasspath(String bootclasspath) {
+        this.bootclasspath = bootclasspath
+    }
+
+    File[] getSourceRoots() {
+        def sourceRoots = []
+        source.sourceCollections.each {
+            it.asFileTrees.each {
+                sourceRoots << it.dir
+            }
+        }
+        return sourceRoots
     }
 }

@@ -1,4 +1,9 @@
 buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.3'
     }
@@ -11,6 +16,9 @@ apply plugin: 'nexus'
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
 
+// Got the following error on Android Studio
+// Error:(18, 0) Gradle: A problem occurred evaluating project ':plugin'.
+// > Could not find property 'GROUP' on project ':plugin'.
 group = GROUP
 version = VERSION_NAME
 
@@ -22,7 +30,8 @@ dependencies {
 
     compile gradleApi()
     compile localGroovy()
-    compile 'com.android.tools.build:gradle:1.1.2'
+
+    compile 'com.android.tools.build:gradle:1.2.3'
     compile "org.aspectj:aspectjtools:${aspectjVersion}"
     compile "org.aspectj:aspectjrt:${aspectjVersion}"
 

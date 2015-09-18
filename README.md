@@ -16,7 +16,7 @@ classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.+'
 
 Apply the `android-aspectj` plugin:
 ```groovy
-apply plugin: 'android-aspectj'
+apply plugin: 'com.uphyca.android-aspectj'
 ```
 
 License
