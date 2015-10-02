@@ -1,5 +1,13 @@
 include 'plugin'
 project(':plugin').name = 'plugin'
 
-//include 'tests'
-//project(':tests').name = 'tests'
+def testsRootDir = new File(rootProject.projectDir, 'tests')
+
+
+//project(':simple').name = 'simple'
+include ':simple'
+project(':simple').projectDir = new File(testsRootDir, 'simple')
+
+
+include ':dagger2'
+project(':dagger2').projectDir = new File(testsRootDir, 'dagger2')
