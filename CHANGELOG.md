@@ -1,3 +1,8 @@
+Version 0.9.13 *(2015-10-2)*
+----------------------------
+Support generated source folders
+Improve build performance
+
 Version 0.9.12 *(2015-3-20)*
 ----------------------------
 Fixed: can't resolve classes in libs/*.jar of aar library
