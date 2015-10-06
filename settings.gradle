@@ -1,13 +1,13 @@
-include 'plugin'
-project(':plugin').name = 'plugin'
+include ':plugin'
 
 def testsRootDir = new File(rootProject.projectDir, 'tests')
 
-
-//project(':simple').name = 'simple'
-include ':simple'
-project(':simple').projectDir = new File(testsRootDir, 'simple')
+include ':codeBasedStyle'
+project(':codeBasedStyle').projectDir = new File(testsRootDir, 'codeBasedStyle')
 
 
-include ':dagger2'
-project(':dagger2').projectDir = new File(testsRootDir, 'dagger2')
+include ':annotationBasedStyle'
+project(':annotationBasedStyle').projectDir = new File(testsRootDir, 'annotationBasedStyle')
+
+include ':androidAptIntegration'
+project(':androidAptIntegration').projectDir = new File(testsRootDir, 'androidAptIntegration')
