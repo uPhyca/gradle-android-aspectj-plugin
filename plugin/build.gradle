@@ -19,8 +19,10 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 // Got the following error on Android Studio
 // Error:(18, 0) Gradle: A problem occurred evaluating project ':plugin'.
 // > Could not find property 'GROUP' on project ':plugin'.
-group = GROUP
-version = VERSION_NAME
+if(project.hasProperty('GROUP')) {
+    group = GROUP
+    version = VERSION_NAME
+}
 
 dependencies {
     repositories {
