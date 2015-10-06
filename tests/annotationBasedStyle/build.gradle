@@ -59,4 +59,13 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+
+    testCompile "org.robolectric:robolectric:3.0"
+    testCompile ('junit:junit:4.12'){
+        transitive = false
+    }
+    testCompile ('com.squareup.assertj:assertj-android:1.1.0@jar') {
+        transitive = true
+    }
+    testCompile 'com.android.support:support-annotations:23.0.1'
 }
