@@ -11,3 +11,9 @@ project(':annotationBasedStyle').projectDir = new File(testsRootDir, 'annotation
 
 include ':androidAptIntegration'
 project(':androidAptIntegration').projectDir = new File(testsRootDir, 'androidAptIntegration')
+
+include ':declareParents'
+project(':declareParents').projectDir = new File(testsRootDir, 'declareParents')
+
+include ':declareMixin'
+project(':declareMixin').projectDir = new File(testsRootDir, 'declareMixin')
