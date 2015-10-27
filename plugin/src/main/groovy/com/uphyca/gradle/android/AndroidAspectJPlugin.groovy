@@ -73,6 +73,11 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                     inpath = project.configurations.ajInpath
                 }
 
+                // javaCompile.classpath does not contain exploded-aar/**/jars/*.jars till first run
+                javaCompile.doLast {
+                    aspectjCompile.classpath = javaCompile.classpath
+                }
+
                 aspectjCompile.dependsOn javaCompile
                 javaCompile.finalizedBy aspectjCompile
             }
