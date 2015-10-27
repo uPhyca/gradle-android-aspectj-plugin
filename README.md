@@ -11,7 +11,7 @@ Usage
 
 Add the plugin to your `buildscript`'s `dependencies` section:
 ```groovy
-classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.13'
+classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.14'
 ```
 
 Apply the `android-aspectj` plugin:

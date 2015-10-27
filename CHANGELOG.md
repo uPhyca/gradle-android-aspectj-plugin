@@ -1,3 +1,7 @@
+Version 0.9.14 *(2015-10-27)*
+----------------------------
+Fixed: Builds failed with AAR dependencies
+
 Version 0.9.13 *(2015-10-2)*
 ----------------------------
 Support generated source folders
