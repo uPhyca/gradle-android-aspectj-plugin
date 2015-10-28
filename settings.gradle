@@ -5,7 +5,6 @@ def testsRootDir = new File(rootProject.projectDir, 'tests')
 include ':codeBasedStyle'
 project(':codeBasedStyle').projectDir = new File(testsRootDir, 'codeBasedStyle')
 
-
 include ':annotationBasedStyle'
 project(':annotationBasedStyle').projectDir = new File(testsRootDir, 'annotationBasedStyle')
 
