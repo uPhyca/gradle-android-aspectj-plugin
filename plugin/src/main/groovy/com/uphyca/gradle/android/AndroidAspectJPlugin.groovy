@@ -42,7 +42,7 @@ class AndroidAspectJPlugin implements Plugin<Project> {
                 def variantName = variant.name.capitalize()
                 def taskName = "compile${variantName}Aspectj"
 
-                JavaCompile javaCompile = variant.javaCompiler
+                JavaCompile javaCompile = variant.hasProperty('javaCompiler') ? variant.javaCompiler : variant.javaCompile
 
                 def aspectjCompile = project.task(taskName, overwrite: true, group: 'build', description: 'Compiles AspectJ Source', type: AspectjCompile) {
 
