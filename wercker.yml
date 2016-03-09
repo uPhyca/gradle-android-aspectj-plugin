@@ -4,4 +4,4 @@ build:
     - script:
         name: build
         code: |
-          gradle --full-stacktrace --project-cache-dir=$WERCKER_CACHE_DIR build
+          gradle --full-stacktrace --project-cache-dir=$WERCKER_CACHE_DIR clean build
