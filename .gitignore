@@ -27,3 +27,5 @@ local.properties
 _builds
 _projects
 _steps
+
+*.log
