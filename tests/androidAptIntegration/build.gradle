@@ -13,7 +13,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.uphyca.android-aspectj'
 
-def isWercker = "true".equals(System.getenv("WERCKER"))
+def isCI = "true".equals(System.getenv("CI"))
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 android {
@@ -28,7 +28,7 @@ android {
 
     dexOptions {
         // Skip pre-dexing when running on Wercker CI or when disabled via -Dpre-dex=false.
-        preDexLibraries = preDexEnabled && !isWercker
+        preDexLibraries = preDexEnabled && !isCI
     }
 
     defaultConfig {
