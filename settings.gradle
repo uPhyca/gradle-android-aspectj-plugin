@@ -16,3 +16,6 @@ project(':declareParents').projectDir = new File(testsRootDir, 'declareParents')
 
 include ':declareMixin'
 project(':declareMixin').projectDir = new File(testsRootDir, 'declareMixin')
+
+include ':dataBinding'
+project(':dataBinding').projectDir = new File(testsRootDir, 'dataBinding')
