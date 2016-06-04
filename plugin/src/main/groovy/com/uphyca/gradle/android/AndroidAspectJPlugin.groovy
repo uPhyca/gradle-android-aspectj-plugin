@@ -20,7 +20,7 @@ class AndroidAspectJPlugin implements Plugin<Project> {
             mavenCentral()
         }
         project.dependencies {
-            compile 'org.aspectj:aspectjrt:1.8.7'
+            compile 'org.aspectj:aspectjrt:1.8.9'
         }
 
 
