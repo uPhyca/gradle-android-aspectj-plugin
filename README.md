@@ -1,3 +1,6 @@
+## DEPRECATED
+This project is now deprecated. Use https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx instead.
+
 [![wercker status](https://app.wercker.com/status/abab3a54a2dd310784896ceca989a462/s "wercker status")](https://app.wercker.com/project/bykey/abab3a54a2dd310784896ceca989a462)
 
 Gradle Android AspectJ Plugin
