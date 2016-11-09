@@ -14,8 +14,8 @@ apply plugin: 'maven'
 apply plugin: 'nexus'
 apply plugin: 'idea'
 
-targetCompatibility = JavaVersion.VERSION_1_7
-sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 // Got the following error on Android Studio
 // Error:(18, 0) Gradle: A problem occurred evaluating project ':plugin'.
