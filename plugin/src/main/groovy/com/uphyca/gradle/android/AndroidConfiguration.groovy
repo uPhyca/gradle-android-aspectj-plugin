@@ -35,7 +35,22 @@ class AndroidConfiguration {
      * @return Collection of variants.
      */
     DomainObjectCollection<BaseVariant> getVariants() {
-        return hasAppPlugin ? project.android.applicationVariants : project.android.libraryVariants
+        def variants
+        if (hasAppPlugin) {
+            variants = project.android.applicationVariants
+        }
+        else {
+            variants = project.android.libraryVariants
+        }
+        
+        def unitTestVariants = []
+        variants.all { variant -> 
+            unitTestVariants += [variant.unitTestVariant]
+        }
+        
+        variants += project.android.testVariants + unitTestVariants
+        
+        return variants
     }
 
     /**
